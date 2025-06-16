@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                     Notes new_notes = (Notes) data.getSerializableExtra("note");
                     database.mainDAO().insert(new_notes);
                     notes.clear();
+
                     notes.addAll(database.mainDAO().getAll());
                     notesListAdapter.notifyDataSetChanged();
                 }
