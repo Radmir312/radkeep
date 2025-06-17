@@ -13,9 +13,20 @@
         android:theme="@style/Theme.Radkeep"
         tools:targetApi="31">
         <activity
-            android:name=".NotesTakerActivity"
-            android:theme="@style/Base.Theme.Radkeep.NoActionBar"
+            android:name=".RegisterActivity"
             android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".NotesTakerActivity"
+            android:exported="false"
+            android:theme="@style/Base.Theme.Radkeep.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

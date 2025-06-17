@@ -8,6 +8,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 
 import com.example.radkeep.Models.Notes;
+import com.example.radkeep.Models.User;
 
 import java.util.List;
 
@@ -29,5 +30,14 @@ public interface mainDAO {
     void delete (Notes notes);
     @Query("UPDATE notes SET pinned = :pin WHERE id = :ID")
     void pin (int ID, boolean pin);
+
+    @Insert(onConflict = REPLACE)
+    void insertUser(User user);
+
+    @Query("SELECT * FROM users WHERE email = :email AND password = :password LIMIT 1")
+    User login(String email, String password);
+
+    @Query("SELECT * FROM users WHERE email = :email LIMIT 1")
+    User getUserByEmail(String email);
 
 }
