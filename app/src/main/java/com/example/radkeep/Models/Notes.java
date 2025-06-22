@@ -24,6 +24,17 @@ public class Notes implements Serializable {
     @ColumnInfo(name = "pinned")
     boolean pinned = false;
 
+    @ColumnInfo(name = "userID")
+    int UserId;
+
+    public int getUserId() {
+        return UserId;
+    }
+
+    public void setUserId(int userId) {
+        this.UserId = userId;
+    }
+
     public int getID() {
         return ID;
     }

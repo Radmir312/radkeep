@@ -27,6 +27,7 @@ public abstract class RoomDB extends RoomDatabase {
                     "`email` TEXT, " +
                     "`password` TEXT, " +
                     "`name` TEXT)");
+            database.execSQL("ALTER TABLE notes ADD COLUMN userId INTEGER NOT NULL DEFAULT 0");
 
 
             try {

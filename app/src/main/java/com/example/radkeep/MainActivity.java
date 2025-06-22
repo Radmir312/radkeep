@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -30,6 +29,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
     private SessionManager sessionManager;
+    private int currentUserId;
     RecyclerView recyclerView;
     FloatingActionButton fab_add;
     NotesListAdapter notesListAdapter;
@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             finish();
             return;
         }
+        currentUserId = sessionManager.getUserId();
 
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
@@ -72,7 +73,8 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
     private void setupDatabase() {
         database = RoomDB.getInstance(this);
-        notes = database.mainDAO().getAll();
+        notes = database.mainDAO().getAllByUserId(currentUserId);
+//        updateRecycler(notes);
     }
 
     private void setupRecyclerView() {
@@ -105,8 +107,9 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     private void filter(String newText) {
         List<Notes> filteredList = new ArrayList<>();
         for (Notes singleNote : notes) {
-            if (singleNote.getTitle().toLowerCase().contains(newText.toLowerCase())
-                    || singleNote.getNotes().toLowerCase().contains(newText.toLowerCase())) {
+            if ((singleNote.getTitle().toLowerCase().contains(newText.toLowerCase()) ||
+                    singleNote.getNotes().toLowerCase().contains(newText.toLowerCase())) &&
+                    singleNote.getUserId() == currentUserId) { // Проверка пользователя
                 filteredList.add(singleNote);
             }
         }
@@ -119,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
         if (requestCode == 101 && resultCode == Activity.RESULT_OK && data != null) {
             Notes new_notes = (Notes) data.getSerializableExtra("note");
+            new_notes.setUserId(currentUserId);
             database.mainDAO().insert(new_notes);
             refreshNotesList();
         } else if (requestCode == 102 && resultCode == Activity.RESULT_OK && data != null) {
@@ -130,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
     private void refreshNotesList() {
         notes.clear();
-        notes.addAll(database.mainDAO().getAll());
+        notes.addAll(database.mainDAO().getAllByUserId(currentUserId));
         notesListAdapter.notifyDataSetChanged();
     }
 

@@ -20,8 +20,8 @@ public interface mainDAO {
     @Insert (onConflict = REPLACE)
     void insert (Notes notes);
 
-    @Query("SELECT * FROM notes ORDER BY id DESC")
-    List <Notes> getAll();
+    @Query("SELECT * FROM notes WHERE UserId = :userId ORDER BY id DESC")
+    List <Notes> getAllByUserId(int userId);
 
     @Query("UPDATE notes SET title = :title, notes = :notes WHERE id = :ID")
     void update (int ID, String title, String notes);
@@ -39,5 +39,7 @@ public interface mainDAO {
 
     @Query("SELECT * FROM users WHERE email = :email LIMIT 1")
     User getUserByEmail(String email);
+
+
 
 }
